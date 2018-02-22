@@ -4,10 +4,47 @@
 	<div class="starter-template">
 		<h1>Your Payment:</h1>
 		<div class="message-popover">
-		<div class="alert alert-success" role="alert">
-        <strong>Well done!</strong> You successfully read this important alert message.
-      </div>
-  </div>
+			<div class="alert alert-success" role="alert">
+				<strong>10MIOTA Received!</strong>
+				<script type="text/javascript">
+					$(document).ready(function() {
+
+						$("#generate-string").click(function(e) {
+							$.post("/generator", {"length": $("input[name='length']").val()})
+							.done(function(string) {
+								$("#the-string").show();
+								$("#the-string input").val(string);
+							});
+							e.preventDefault();
+						});
+
+						$("#replace-string").click(function(e) {
+							$.ajax({
+								type: "PUT",
+								url: "/generator",
+								data: {"another_string": $("#the-string input").val()}
+							})
+							.done(function() {
+								alert("Replaced!");
+							});
+							e.preventDefault();
+						});
+
+						$("#delete-string").click(function(e) {
+							$.ajax({
+								type: "DELETE",
+								url: "/generator"
+							})
+							.done(function() {
+								$("#the-string").hide();
+							});
+							e.preventDefault();
+						});
+
+					});
+				</script>
+			</div>
+		</div>
 	</div>
 </div>
 {% endblock %}
