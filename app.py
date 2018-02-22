@@ -14,7 +14,9 @@ class HelloWorld(object):
     def paid(self):
         tmpl = env.get_template('paid.html')
         return tmpl.render()
-
+        
+class DataView(object):
+    exposed = True
     @cherrypy.tools.accept(media='application/json')
     @cherrypy.expose
     def seller(self):
