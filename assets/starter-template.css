@@ -1,0 +1,17 @@
+body {
+  padding-top: 30px;
+}
+.starter-template {
+  padding: 20px 15px;
+  text-align: center;
+}
+
+.paid-template {
+  padding: 50px 15px;
+  text-align: center;
+}
+
+.navbar-inverse .navbar-brand {
+	text-align: center;
+    color: white;
+}
