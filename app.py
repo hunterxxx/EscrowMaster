@@ -15,43 +15,38 @@ class HelloWorld(object):
         tmpl = env.get_template('paid.html')
         return tmpl.render()
 
+    @cherrypy.tools.accept(media='application/json')
     @cherrypy.expose
     def seller(self):
+        rawData = cherrypy.request.body.read(int(cherrypy.request.headers['Content-Length']))
         tmpl = env.get_template('seller.html')
+        b = json.loads(rawData)
+# do something with b, in this case I am returning it inside another object
+        return json.dumps({'x': 4, 'c': b})
         return tmpl.render()
 
-    @cherrypy.expose
-    def update(self):
-        cl = cherrypy.request.headers['Content-Length']
-        rawbody = cherrypy.request.body.read(int(cl))
-        body = simplejson.loads(rawbody)
-        # do_something_with(body)
-        return "Updated %r." % (body,)
+@cherrypy.expose
+class SenderRoutes(object):
+    def GET(self, sender_id):
+        return dumps([r for r in records])
 
-    @cherrypy.expose
-    def receive(self):
-        return """
-<html>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-<script type='text/javascript'>
-function Update() {
-    $.ajax({
-      type: 'POST',
-      url: "update",
-      contentType: "application/json",
-      processData: false,
-      data: $('#updatebox').val(),
-      success: function(data) {alert(data);},
-      dataType: "text"
-    });
-}
-</script>
-<body>
-<input type='textbox' id='updatebox' value='{}' size='20' />
-<input type='submit' value='Update' onClick='Update(); return false' />
-</body>
-</html>
-"""
+    @cherrypy.tools.accept(media='application/json')
+    def POST(self, sender_id):
+        raw = cherrypy.request.body.read(int(cherrypy.request.headers['Content-Length']))
+        b = json.loads(raw)
+        # read out start, end
+        start = b["start"]
+        assert "lat" in start
+        assert "long" in start
+        assert "id" in start
+        end = b["end"]
+        assert "lat" in end
+        assert "long" in end
+        assert "id" in end
+        routes.insert_one({
+            "start": start, "end": end, "sender": int(sender_id)
+        })
+        return dumps({"status": "ok"})
 
 
 config = {
