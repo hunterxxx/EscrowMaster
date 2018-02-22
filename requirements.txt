@@ -1,0 +1,5 @@
+cherrypy
+requests
+Jinja2
+pymongo
+dnspython
